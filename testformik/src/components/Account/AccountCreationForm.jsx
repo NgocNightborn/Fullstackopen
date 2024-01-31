@@ -9,7 +9,8 @@ const AccountCreationForm = () => {
                 initialValues={{
                 fullname: '',
                 email: '',
-                password: ''
+                password: '',
+                status:''
                 }}
                 validationSchema={Yup.object({
                 fullname: Yup.string()
@@ -20,6 +21,11 @@ const AccountCreationForm = () => {
                     .required('Requis'),
                 password: Yup.string()
                     .max(16, 'Doit être composé de 16 caractères ou moins')
+                    .required('Requis'),
+                status: Yup.string()
+                    .oneOf(
+                        ["student", "employee"], "Statut invalide"
+                    )
                     .required('Requis')
                 })}
                 onSubmit={(values => {
@@ -54,6 +60,14 @@ const AccountCreationForm = () => {
                 />
                 <div style={{ color: 'red', fontSize: '16px', marginBottom: '5px' }}>
                     <ErrorMessage name="password" />
+                </div>
+                <Field as="select" name="status">
+                    <option value="">Sélectionner votre statut</option>
+                    <option value="student">Etudiant</option>
+                    <option value="employee">Employé</option>
+                </Field>
+                <div style={{ color: 'red', fontSize: '16px', marginBottom: '5px' }}>
+                    <ErrorMessage name="status" />
                 </div>
                 <button type="submit">S'inscrire</button>
                 </Form> 
