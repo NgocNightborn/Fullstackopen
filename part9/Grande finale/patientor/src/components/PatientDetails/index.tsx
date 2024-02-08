@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import diagnoseService from "../../services/diagnoses";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import { Diagnose, Entry, Patient } from "../../types";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import EntryDetails from "../EntryDetails/EntryDetails";
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -40,7 +41,7 @@ const PatientDetails = () => {
     };
 
     return (
-        <Stack>
+        <Box>
             <Box sx={{ display:'flex', fontWeight: 'bold', marginY: '20px'}}>
                 <Typography variant="h5">{patient.name}</Typography>
                 {renderComponentBasedOnGender(patient.gender)}
@@ -51,28 +52,38 @@ const PatientDetails = () => {
             </Box>
 
             <Typography variant="h6">entries</Typography>
-            {patient.entries.map((entry: Entry, index) => {
-                return (
-                    <Box key={index}>
-                        <Typography>{entry.date} {entry.description}</Typography>
-                        <List sx={{ listStyleType: 'disc', pl: 4 }}>
-                        {entry.diagnosisCodes && (
-                            entry.diagnosisCodes.map((code: string) => {
-                                console.log(code);
-                                return (
-                                    <ListItem key={code} sx={{ display: 'list-item' }}>
-                                        {code} {diagnoses.find((diagnose: Diagnose) => diagnose.code === code)?.name}
-                                    </ListItem>
-                                );
-                            }))
-                        }
-                        </List>          
-                    </Box>
-                    
-                );
-            })}
-
-        </Stack>
+            {
+                patient.entries.length === 0 
+                ? <Typography>No entries</Typography>
+                : patient.entries.map((entry: Entry, index: number) => {
+                    return (
+                        <EntryDetails key={index} entry={entry} />
+                        // <Card key={index} sx={{ marginBottom: '15px', border:'2px solid' }}>
+                        //     <CardContent>
+                        //         <Box>
+                        //             <Typography>{entry.date}</Typography>
+                        //             <Typography>{entry.description}</Typography>
+                        //             <List sx={{ listStyleType: 'disc', pl: 4 }}>
+                        //             {entry.diagnosisCodes && (
+                        //                 entry.diagnosisCodes.map((code: string) => {
+                        //                     console.log(code);
+                        //                     return (
+                        //                         <ListItem key={code} sx={{ display: 'list-item' }}>
+                        //                             {code} {diagnoses.find((diagnose: Diagnose) => diagnose.code === code)?.name}
+                        //                         </ListItem>
+                        //                     );
+                        //                 }))
+                        //             }
+                        //             </List>          
+                        //         </Box>
+                        //     </CardContent>                 
+                        // </Card>         
+                        
+                    );
+                })
+            }
+            <Button variant="contained">ADD NEW ENTRY</Button>
+        </Box>
         
     );
 };
