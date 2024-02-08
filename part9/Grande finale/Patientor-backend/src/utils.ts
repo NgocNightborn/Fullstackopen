@@ -1,4 +1,4 @@
-import { BaseEntryWithoutId, Discharge, Entry, EntryWithoutId, Gender, HealthCheckEntry, HealthCheckRating, HospitalEntry, OccupationalHealthcareEntry, SickLeave, diagnoseEntry, newPatientEntry } from "./types";
+import { BaseEntryWithoutId, Discharge, EntryWithoutId, Gender, HealthCheckRating, SickLeave, diagnoseEntry, newPatientEntry } from "./types";
 
 const toNewPatientEntry = (object: unknown): newPatientEntry => {
     if (!object || typeof object !== 'object') {
@@ -19,7 +19,7 @@ const toNewPatientEntry = (object: unknown): newPatientEntry => {
 };
 
 export const toNewEntry = (object: unknown): EntryWithoutId => {
-    if (!object || typeof object !== 'object' || !isEntry(object)) {
+    if (!object || typeof object !== 'object' || !isEntryWithoutId(object)) {
         throw new Error('Incorrect or missing data');
     }
 
@@ -105,9 +105,9 @@ const parseDiagnosisCodes = (object: unknown): Array<diagnoseEntry['code']> =>  
 //     return Array.isArray(value);
 // };
 
-const isEntry = (entry: unknown): entry is Entry => {
+const isEntryWithoutId = (entry: unknown): entry is EntryWithoutId => {
     if (!entry || typeof entry !== 'object') return false;
-    return 'id' in entry && 'description' in entry && 'date' in entry && 'specialist' in entry && 'type' in entry;
+    return 'description' in entry && 'date' in entry && 'specialist' in entry && 'type' in entry;
 };
 
 const parseBaseEntry = (entry: EntryWithoutId): BaseEntryWithoutId => {
@@ -123,15 +123,17 @@ const parseBaseEntry = (entry: EntryWithoutId): BaseEntryWithoutId => {
     return baseEntry;
 };
 
-const parseHopitalEntry = (entry: HospitalEntry): EntryWithoutId => {
-    const baseEntry = parseBaseEntry(entry);
-    const hospitalEntry: EntryWithoutId = {
-        ...baseEntry,
-        type: entry.type,
-        discharge: parseDischarge(entry.discharge)
-    };
-
-    return hospitalEntry;
+const parseHopitalEntry = (entry: EntryWithoutId): EntryWithoutId => {
+    if ('discharge' in entry) {
+        const baseEntry = parseBaseEntry(entry);
+        const hospitalEntry: EntryWithoutId = {
+            ...baseEntry,
+            type: entry.type,
+            discharge: parseDischarge(entry.discharge)
+        };
+        return hospitalEntry;
+    }
+    throw new Error('Incorrect entry type'); 
 };
 
 const parseDischarge = (discharge: unknown): Discharge => {
@@ -155,15 +157,18 @@ const isDischarge = (value: unknown): value is Discharge => {
     return false;
 };
 
-const parseHealthCheckEntry = (entry: HealthCheckEntry): EntryWithoutId => {
-    const baseEntry = parseBaseEntry(entry);
-    const healthCheckEntry: EntryWithoutId = {
-        ...baseEntry,
-        type: entry.type,
-        healthCheckRating: parseHealthCheckRating(entry.healthCheckRating)
-    }; 
-
-    return healthCheckEntry;
+const parseHealthCheckEntry = (entry: EntryWithoutId): EntryWithoutId => {
+    if ('healthCheckRating' in entry) {
+        const baseEntry = parseBaseEntry(entry);
+        const healthCheckEntry: EntryWithoutId = {
+            ...baseEntry,
+            type: entry.type,
+            healthCheckRating: parseHealthCheckRating(entry.healthCheckRating)
+        }; 
+        return healthCheckEntry;
+    }
+    throw new Error('Incorrect type');
+    
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
@@ -181,18 +186,21 @@ const isHealthCheckRating = (value: number): value is HealthCheckRating => {
     return Object.values(HealthCheckRating).includes(value);
 };
 
-const parseOccupationalHealthcareEntry = (entry: OccupationalHealthcareEntry): EntryWithoutId => {
-    const baseEntry = parseBaseEntry(entry);
-    const occupationalHealthcareEntry: EntryWithoutId = {
-        ...baseEntry,
-        type: entry.type,
-        employerName: parseString(entry.employerName),
-    };
-    if (entry.sickLeave) {
-        occupationalHealthcareEntry.sickLeave = parseSickLeave(entry.sickLeave);
+const parseOccupationalHealthcareEntry = (entry: EntryWithoutId): EntryWithoutId => {
+    if ('employerName' in entry) {
+        const baseEntry = parseBaseEntry(entry);
+        const occupationalHealthcareEntry: EntryWithoutId = {
+            ...baseEntry,
+            type: entry.type,
+            employerName: parseString(entry.employerName),
+        };
+        if ('sickLeave' in entry) {
+            occupationalHealthcareEntry.sickLeave = parseSickLeave(entry.sickLeave);
+        }
+        return occupationalHealthcareEntry;
     }
-
-    return occupationalHealthcareEntry;
+    throw new Error('Incorrect type');
+    
 };
 
 const parseSickLeave = (sickLeave: unknown): SickLeave => {
