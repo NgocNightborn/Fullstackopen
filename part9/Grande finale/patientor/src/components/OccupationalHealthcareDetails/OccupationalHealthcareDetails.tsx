@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { OccupationalHealthcareDetailsProps } from "./types";
 import WorkIcon from '@mui/icons-material/Work';
 
