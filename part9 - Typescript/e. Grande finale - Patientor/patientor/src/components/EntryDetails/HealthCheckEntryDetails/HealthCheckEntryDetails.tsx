@@ -1,5 +1,5 @@
 
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { HealthCheckEntryDetailsProps } from "./types";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
