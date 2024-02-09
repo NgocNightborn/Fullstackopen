@@ -30,19 +30,26 @@ import { getStyles } from "../../themes/themes";
 const AddEntry = (props: AddEntryProps) => {
   const { id } = useParams();
   const [formFields, setFormField] = useState<addEntryForm>({
-    description: "",
-    date: "",
-    specialist: "",
-    healthCheckRating: "",
-    employerName: "",
-    sickLeaveStartDate: "",
-    sickLeaveEndDate: "",
-    dischargeDate: "",
-    dischargeCriteria: "",
+    description: '',
+    date: '',
+    specialist: '',
+    healthCheckRating: '0',
+    employerName: '',
+    sickLeaveStartDate: '',
+    sickLeaveEndDate: '',
+    dischargeDate: '',
+    dischargeCriteria: '',
   });
 
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
   const theme = useTheme();
+
+  const changeAlertMessage = (message: string) => {
+    props.onMessageChange(message);
+    setTimeout(() => {
+      props.onMessageChange("");
+    }, 5000);
+  };
 
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -111,20 +118,22 @@ const AddEntry = (props: AddEntryProps) => {
     patientService
       .addEntryToPatient(id, newEntry)
       .then((response) => props.onPatientEntryChanges(response))
+      .then(() => {
+        props.onAlertTypeChange('success');
+        changeAlertMessage('Successfully added entry'); 
+      })
       .catch((e: unknown) => {
         if (axios.isAxiosError(e)) {
           if (e?.response?.data && typeof e?.response?.data === "string") {
             const message = e.response.data;
-            props.onErrorChange(message);
-            setTimeout(() => {
-              props.onErrorChange("");
-            }, 5000);
+            props.onAlertTypeChange('error');
+            changeAlertMessage(message);
           } else {
-            props.onErrorChange("Unrecognized axios error");
+            props.onMessageChange("Unrecognized axios error");
           }
         } else {
           console.error("Unknown error", e);
-          props.onErrorChange("Unknown error");
+          props.onMessageChange("Unknown error");
         }
       });
   };
@@ -174,17 +183,17 @@ const AddEntry = (props: AddEntryProps) => {
         return (
           <>
             <Box sx={{ marginBottom: "15px" }}>
-              <FormControl>
-                <TextField
-                  id='dischargeDate'
-                  name='dischargeDate'
-                  onChange={handleFieldChange}
-                  value={formFields.dischargeDate}
-                  label='Discharge date'
-                />
+              <FormControl sx={{marginRight: '8px'}}>
+                  <TextField
+                    id='dischargeDate'
+                    name='dischargeDate'
+                    onChange={handleFieldChange}
+                    value={formFields.dischargeDate}
+                    label='Discharge date'
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                  />
               </FormControl>
-            </Box>
-            <Box sx={{ marginBottom: "15px" }}>
               <FormControl>
                 <TextField
                   id='dischargeCriteria'
@@ -202,7 +211,6 @@ const AddEntry = (props: AddEntryProps) => {
           <>
             <Box sx={{ marginBottom: "15px" }}>
               <FormControl>
-                <InputLabel htmlFor='employerName'>Employer name</InputLabel>
                 <TextField
                   id='employerName'
                   name='employerName'
@@ -213,7 +221,7 @@ const AddEntry = (props: AddEntryProps) => {
               </FormControl>
             </Box>
             <Box sx={{ marginBottom: "15px" }}>
-              <FormControl>
+              <FormControl sx={{marginRight: '8px'}}>
                 <TextField
                   id='sickLeaveStartDate'
                   name='sickLeaveStartDate'
@@ -224,8 +232,6 @@ const AddEntry = (props: AddEntryProps) => {
                   InputLabelProps={{ shrink: true }}
                 />
               </FormControl>
-            </Box>
-            <Box sx={{ marginBottom: "15px" }}>
               <FormControl>
                 <TextField
                   id='sickLeaveEndDate'
