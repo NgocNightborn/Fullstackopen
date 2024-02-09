@@ -10,7 +10,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormGroup,
   Select,
   MenuItem,
   OutlinedInput,
@@ -23,28 +22,10 @@ import patientService from "../../services/patients";
 import { useParams } from "react-router-dom";
 import { EntryWithoutId } from "../../types";
 import axios from "axios";
-import { Theme, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import { MenuProps } from "../../constants/constants";
+import { getStyles } from "../../themes/themes";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-
-const MenuProps = {
-    PaperProps: {
-        style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-        },
-    },
-};
-
-function getStyles(name: string, personName: string[], theme: Theme) {
-return {
-    fontWeight:
-    personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-};
-}
 
 const AddEntry = (props: AddEntryProps) => {
   const { id } = useParams();
@@ -63,8 +44,6 @@ const AddEntry = (props: AddEntryProps) => {
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
   const theme = useTheme();
 
-  console.log(diagnosisCodes)
-  
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setFormField((prevState) => {
@@ -80,7 +59,6 @@ const AddEntry = (props: AddEntryProps) => {
       target: { value },
     } = event;
     setDiagnosisCodes(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -307,15 +285,15 @@ const AddEntry = (props: AddEntryProps) => {
 
       </Box>
       <Box sx={{ marginBottom: "15px" }}>
-        <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <FormControl sx={{ width: 300 }}>
+            <InputLabel id="demo-multiple-chip-label">Diagnosis codes</InputLabel>
             <Select
             labelId="demo-multiple-chip-label"
             id="demo-multiple-chip"
             multiple
             value={diagnosisCodes}
             onChange={handleDiagnosisCodesChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+            input={<OutlinedInput id="select-multiple-chip" label="Diagnosis codes" />}
             renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {selected.map((value) => (
@@ -335,13 +313,6 @@ const AddEntry = (props: AddEntryProps) => {
                 </MenuItem>
             ))}
             </Select>
-          {/* <TextField
-            id='diagnosisCode'
-            name='diagnosisCodes'
-            onChange={handleFieldChange}
-            value={formFields.diagnosisCodes}
-            label='Diagnosis codes'
-          /> */}
         </FormControl>
       </Box>
 
