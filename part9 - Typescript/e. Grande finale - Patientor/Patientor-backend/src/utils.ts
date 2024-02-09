@@ -7,11 +7,11 @@ const toNewPatientEntry = (object: unknown): newPatientEntry => {
 
     if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object) {
         const newEntry: newPatientEntry = {
-            name: parseString(object.name),
+            name: parseString(object.name, 'name'),
             dateOfBirth: parseDate(object.dateOfBirth),
-            ssn: parseString(object.ssn),
+            ssn: parseString(object.ssn, 'ssn'),
             gender: parseGender(object.gender),
-            occupation: parseString(object.occupation),
+            occupation: parseString(object.occupation, 'occupation'),
         };
         return newEntry;
     }
@@ -35,11 +35,11 @@ export const toNewEntry = (object: unknown): EntryWithoutId => {
     }
 };
 
-const parseString = (name: unknown): string => {
-    if (!name || !isString(name)) {
-        throw new Error('Incorrect or missing comment');
+const parseString = (string: unknown, name: string): string => {
+    if (!string || !isString(string)) {
+        throw new Error(`Incorrect or missing ${name}`);
     }
-    return name;
+    return string;
 };
 
 const isString = (text: unknown): text is string => {
@@ -76,34 +76,6 @@ const parseDiagnosisCodes = (object: unknown): Array<diagnoseEntry['code']> =>  
     return object.diagnosisCodes as Array<diagnoseEntry['code']>;
 };
 
-// const parseEntries = (entries: unknown): EntryWithoutId[] => {
-//     if (!entries || !isArray(entries) || !isEntryArray(entries)) {
-//         throw new Error('Incorrect or missing entries');
-//     }
-//     const parsedEntries = entries.map(entry => {
-//         switch (entry.type) {
-//             case 'Hospital':
-//                 return parseHopitalEntry(entry);
-//             case 'HealthCheck':
-//                 return parseHealthCheckEntry(entry);
-//             case 'OccupationalHealthcare':
-//                 return parseOccupationalHealthcareEntry(entry);
-//             default:
-//                 throw new Error('Incorrect entries');
-//         }
-//     });
-//     return parseEntries;
-// };
-
-
-// const isEntryArray = (entries: unknown[]): entries is Entry[] => {
-//     return entries.every(entry => isEntry(entry));
-// };
-
-// const isArray = (value: unknown): value is unknown[] => {
-//     return Array.isArray(value);
-// };
-
 const isEntryWithoutId = (entry: unknown): entry is EntryWithoutId => {
     if (!entry || typeof entry !== 'object') return false;
     return 'description' in entry && 'date' in entry && 'specialist' in entry && 'type' in entry;
@@ -111,9 +83,9 @@ const isEntryWithoutId = (entry: unknown): entry is EntryWithoutId => {
 
 const parseBaseEntry = (entry: EntryWithoutId): BaseEntryWithoutId => {
     const baseEntry: BaseEntryWithoutId = {
-        description: parseString(entry.description),
+        description: parseString(entry.description, 'description'),
         date: parseDate(entry.date),
-        specialist: parseString(entry.specialist),
+        specialist: parseString(entry.specialist, 'specialist'),
     };
 
     if ('diagnosisCodes' in entry) {
@@ -166,7 +138,7 @@ const parseHealthCheckEntry = (entry: EntryWithoutId): EntryWithoutId => {
         }; 
         return healthCheckEntry;
     }
-    throw new Error('Incorrect type');
+    throw new Error('Missing healthCheckRating in entry');
     
 };
 
@@ -191,7 +163,7 @@ const parseOccupationalHealthcareEntry = (entry: EntryWithoutId): EntryWithoutId
         const occupationalHealthcareEntry: EntryWithoutId = {
             ...baseEntry,
             type: entry.type,
-            employerName: parseString(entry.employerName),
+            employerName: parseString(entry.employerName, 'employerName'),
         };
         if ('sickLeave' in entry) {
             occupationalHealthcareEntry.sickLeave = parseSickLeave(entry.sickLeave);
