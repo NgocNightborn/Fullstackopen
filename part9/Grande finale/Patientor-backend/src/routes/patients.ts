@@ -17,10 +17,19 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
-    const { id } = req.params;
-    const newEntry = toNewEntry(req.body); 
-    patientService.addEntryToPatient(id, newEntry);
-    return res.json(newEntry);
+    
+    try {
+        const { id } = req.params;
+        const newEntry = toNewEntry(req.body);
+        const addedEntry = patientService.addEntryToPatient(id, newEntry);
+        return res.json(addedEntry);
+    } catch (error: unknown) {
+        let errorMessage = 'Something went wrong: ';
+        if (error instanceof Error) {
+            errorMessage += `Error ${error.message}`;
+        }
+        return res.status(400).send(errorMessage);
+    }
 });
 
 router.post('/', (req, res) => {

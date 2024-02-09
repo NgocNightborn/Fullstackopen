@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { HospitalEntryDetailsProps } from "./types";
+import DiagnosisList from "../DiagnosisList/DiagnosisList";
 
 
 const HospitalEntryDetails = (props: HospitalEntryDetailsProps) => {
@@ -11,7 +12,8 @@ const HospitalEntryDetails = (props: HospitalEntryDetailsProps) => {
                 </Typography>
                 <Typography>{props.entry.description}</Typography>
                 <Typography>discharge {props.entry.discharge.date} {props.entry.discharge.criteria}</Typography>
-                <Typography>diagnose by {props.entry.specialist}</Typography>   
+                <Typography>diagnose by {props.entry.specialist}</Typography> 
+                {props.entry.diagnosisCodes && <DiagnosisList entry={props.entry} diagnoses={props.diagnoses} />}    
             </CardContent>
         </Card>
     );

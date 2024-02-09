@@ -73,7 +73,6 @@ const parseDiagnosisCodes = (object: unknown): Array<diagnoseEntry['code']> =>  
         // we will just trust the data to be in correct form
         return [] as Array<diagnoseEntry['code']>;
     }
-
     return object.diagnosisCodes as Array<diagnoseEntry['code']>;
 };
 
@@ -117,8 +116,8 @@ const parseBaseEntry = (entry: EntryWithoutId): BaseEntryWithoutId => {
         specialist: parseString(entry.specialist),
     };
 
-    if (entry.diagnosisCodes) {
-        baseEntry.diagnosisCodes = parseDiagnosisCodes(entry.diagnosisCodes);
+    if ('diagnosisCodes' in entry) {
+        baseEntry.diagnosisCodes = parseDiagnosisCodes(entry);
     }
     return baseEntry;
 };

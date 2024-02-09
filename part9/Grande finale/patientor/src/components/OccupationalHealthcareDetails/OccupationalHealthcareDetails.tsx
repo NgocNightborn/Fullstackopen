@@ -1,6 +1,7 @@
 import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { OccupationalHealthcareDetailsProps } from "./types";
 import WorkIcon from '@mui/icons-material/Work';
+import DiagnosisList from "../DiagnosisList/DiagnosisList";
 
 const OccupationalHealthcareDetails = (props: OccupationalHealthcareDetailsProps): JSX.Element => {
     return (
@@ -15,6 +16,7 @@ const OccupationalHealthcareDetails = (props: OccupationalHealthcareDetailsProps
                 </Stack>
                 <Typography>{props.entry.description}</Typography>
                 <Typography>diagnose by {props.entry.specialist}</Typography>
+                {props.entry.diagnosisCodes && <DiagnosisList entry={props.entry} diagnoses={props.diagnoses} />}   
             </CardContent>
         </Card>
     );

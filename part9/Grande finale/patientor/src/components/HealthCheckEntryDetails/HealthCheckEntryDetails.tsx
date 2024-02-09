@@ -4,6 +4,7 @@ import { HealthCheckEntryDetailsProps } from "./types";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { orange, yellow } from "@mui/material/colors";
+import DiagnosisList from "../DiagnosisList/DiagnosisList";
 
 const HealthCheckEntryDetails = (props: HealthCheckEntryDetailsProps) => {
 
@@ -31,7 +32,8 @@ const HealthCheckEntryDetails = (props: HealthCheckEntryDetailsProps) => {
                 </Typography>
                 <Typography>{props.entry.description}</Typography>
                 {healthCheckRatingToIcon(props.entry.healthCheckRating)}
-                <Typography>diagnose by {props.entry.specialist}</Typography>   
+                <Typography>diagnose by {props.entry.specialist}</Typography>
+                {props.entry.diagnosisCodes && <DiagnosisList entry={props.entry} diagnoses={props.diagnoses} />}   
             </CardContent>
         </Card>
     );

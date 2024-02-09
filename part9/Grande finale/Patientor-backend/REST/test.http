@@ -7,7 +7,8 @@ Content-Type: application/json
     "specialist": "MD housesdfs",
     "date": "2023-02-02",
     "type": "HealthCheck",
-    "healthCheckRating": 0
+    "healthCheckRating": 0,
+    "diagnosisCodes": ["F43.2", "L20"]
 }
 
 ###

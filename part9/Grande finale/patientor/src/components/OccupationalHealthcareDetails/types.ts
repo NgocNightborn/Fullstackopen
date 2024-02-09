@@ -1,5 +1,6 @@
-import { OccupationalHealthcareEntry } from "../../types";
+import { Diagnose, OccupationalHealthcareEntry } from "../../types";
 
 export interface OccupationalHealthcareDetailsProps {
-    entry: OccupationalHealthcareEntry
+    entry: OccupationalHealthcareEntry;
+    diagnoses: Diagnose[];
 }

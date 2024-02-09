@@ -1,5 +1,6 @@
-import { Entry } from "../../types";
+import { Diagnose, Entry } from "../../types";
 
 export interface EntryDetailsProps {
-    entry: Entry
+    entry: Entry,
+    diagnoses: Diagnose[]
 }

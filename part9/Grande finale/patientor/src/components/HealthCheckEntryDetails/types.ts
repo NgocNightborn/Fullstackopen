@@ -1,5 +1,6 @@
-import { HealthCheckEntry } from "../../types";
+import { Diagnose, HealthCheckEntry } from "../../types";
 
 export interface HealthCheckEntryDetailsProps {
-    entry: HealthCheckEntry
+    entry: HealthCheckEntry;
+    diagnoses: Diagnose[];
 }
