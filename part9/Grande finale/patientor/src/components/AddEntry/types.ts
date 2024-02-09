@@ -1,10 +1,11 @@
-import { Entry } from "../../types";
+import { Diagnose, Entry } from "../../types";
 
 export interface AddEntryProps {
     onShowForm: () => void;
     onPatientEntryChanges: (entry: Entry) => void;
     onErrorChange: (error: string) => void;
     entryType: string
+    diagnoses: Diagnose[]
 }
 
 export interface addEntryForm {
@@ -12,7 +13,6 @@ export interface addEntryForm {
     date: string;
     specialist: string;
     healthCheckRating: string;
-    diagnosisCodes: string;
     employerName: string,
     sickLeaveStartDate: string,
     sickLeaveEndDate: string,

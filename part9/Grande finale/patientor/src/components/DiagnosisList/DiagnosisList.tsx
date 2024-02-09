@@ -1,7 +1,8 @@
 import { List, ListItem, Typography } from "@mui/material";
 import { Diagnose } from "../../types";
+import { DiagnosisListProps } from "./types";
 
-const DiagnosisList = (props) => {
+const DiagnosisList = (props: DiagnosisListProps) => {
     return (
         <List sx={{ listStyleType: 'disc', pl: 4 }}>
             {props.entry.diagnosisCodes && (

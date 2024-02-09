@@ -93,6 +93,7 @@ const PatientDetails = () => {
           onPatientEntryChanges={handlePatientEntryChanges}
           onErrorChange={handleErrorChange}
           entryType={type}
+          diagnoses={diagnoses}
         />
       )}
 
