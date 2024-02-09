@@ -1,4 +1,4 @@
-import { Diagnose, HospitalEntry } from "../../types";
+import { Diagnose, HospitalEntry } from "../../../types";
 
 export interface HospitalEntryDetailsProps {
     entry: HospitalEntry;

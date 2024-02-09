@@ -1,10 +1,10 @@
 
-import { Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import { HealthCheckEntryDetailsProps } from "./types";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { orange, yellow } from "@mui/material/colors";
-import DiagnosisList from "../DiagnosisList/DiagnosisList";
+import DiagnosisList from "../../DiagnosisList/DiagnosisList";
 
 const HealthCheckEntryDetails = (props: HealthCheckEntryDetailsProps) => {
 
@@ -26,13 +26,14 @@ const HealthCheckEntryDetails = (props: HealthCheckEntryDetailsProps) => {
     return (
         <Card sx={{ marginBottom: '10px', border:'1px solid' }}>
             <CardContent>         
-                <Typography>
+                <Typography sx={{marginBottom: '5px'}}>
                     {props.entry.date}
                     <MedicalServicesIcon />
                 </Typography>
-                <Typography>{props.entry.description}</Typography>
-                {healthCheckRatingToIcon(props.entry.healthCheckRating)}
-                <Typography>diagnose by {props.entry.specialist}</Typography>
+                <Typography sx={{marginBottom: '5px'}}>{props.entry.description}</Typography>            
+                <Typography sx={{marginBottom: '5px'}}>Health rating: {healthCheckRatingToIcon(props.entry.healthCheckRating)}</Typography>
+                <Typography sx={{marginBottom: '5px'}}>Diagnosed by {props.entry.specialist}</Typography>
+                <Typography>Diagnoses: </Typography>
                 {props.entry.diagnosisCodes && <DiagnosisList entry={props.entry} diagnoses={props.diagnoses} />}   
             </CardContent>
         </Card>
