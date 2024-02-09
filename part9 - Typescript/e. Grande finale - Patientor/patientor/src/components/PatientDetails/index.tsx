@@ -4,6 +4,7 @@ import patientService from "../../services/patients";
 import diagnoseService from "../../services/diagnoses";
 import {
   Alert,
+  AlertColor,
   Box,
   Button,
   FormControl,
@@ -26,8 +27,9 @@ const PatientDetails = () => {
   const [patient, setPatient] = useState<Patient>();
   const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const [type, setType] = useState<string>('HealthCheck');
+  const [alertType, setAlertType] = useState<AlertColor>('success');
 
   useEffect(() => {
     patientService.getOne(id).then((response) => setPatient(response));
@@ -68,12 +70,16 @@ const PatientDetails = () => {
     });
   };
 
-  const handleErrorChange = (error: string) => {
-    setError(error);
+  const handleMessageChange = (message: string) => {
+    setMessage(message);
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setType(event.target.value);
+  };
+
+  const handleAlertTypeChange = (color: AlertColor) => {
+    setAlertType(color);
   };
 
   return (
@@ -82,31 +88,11 @@ const PatientDetails = () => {
         <Typography variant='h5'>{patient.name}</Typography>
         {renderComponentBasedOnGender(patient.gender)}
       </Box>
-      <Box>
-        <Typography>ssh: {patient.ssn}</Typography>
+      <Box sx={{marginBottom: '15px'}}>
+        <Typography sx={{marginBottom: '5px'}}>ssh: {patient.ssn}</Typography>
         <Typography>occupation: {patient.occupation}</Typography>
       </Box>
-      {error !== "" && <Alert severity='error'>{error}</Alert>}
-      {showForm && (
-        <AddEntry
-          onShowForm={handleShowForm}
-          onPatientEntryChanges={handlePatientEntryChanges}
-          onErrorChange={handleErrorChange}
-          entryType={type}
-          diagnoses={diagnoses}
-        />
-      )}
-
-      <Typography variant='h6'>entries</Typography>
-      {patient.entries.length === 0 ? (
-        <Typography>No entries</Typography>
-      ) : (
-        patient.entries.map((entry: Entry, index: number) => {
-          return (
-            <EntryDetails key={index} entry={entry} diagnoses={diagnoses} />
-          );
-        })
-      )}
+      {message !== "" && <Alert severity={alertType} sx={{marginY: '10px'}}>{message}</Alert>}
       {
         !showForm && 
             <FormControl>
@@ -128,6 +114,27 @@ const PatientDetails = () => {
                 </RadioGroup> 
             </FormControl>
       }
+      {showForm && (
+        <AddEntry
+          onShowForm={handleShowForm}
+          onPatientEntryChanges={handlePatientEntryChanges}
+          onMessageChange={handleMessageChange}
+          entryType={type}
+          diagnoses={diagnoses}
+          onAlertTypeChange={handleAlertTypeChange}
+        />
+      )}
+
+      <Typography variant='h6'>Entries:</Typography>
+      {patient.entries.length === 0 ? (
+        <Typography>No entries</Typography>
+      ) : (
+        patient.entries.map((entry: Entry, index: number) => {
+          return (
+            <EntryDetails key={index} entry={entry} diagnoses={diagnoses} />
+          );
+        })
+      )}
     </Box>
   );
 };
