@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { HospitalEntryDetailsProps } from "./types";
-import DiagnosisList from "../../DiagnosisList/DiagnosisList";
+import DiagnosisList from "../../DiagnosisList";
 
 
 const HospitalEntryDetails = (props: HospitalEntryDetailsProps) => {

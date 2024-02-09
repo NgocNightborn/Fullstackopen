@@ -1,7 +1,7 @@
 import { EntryDetailsProps } from "./types";
-import OccupationalHealthcareDetails from "./OccupationalHealthcareDetails/OccupationalHealthcareDetails";
-import HospitalEntryDetails from "./HospitalEntryDetails/HospitalEntryDetails";
-import HealthCheckEntryDetails from "./HealthCheckEntryDetails/HealthCheckEntryDetails";
+import OccupationalHealthcareDetails from "./OccupationalHealthcareDetails";
+import HospitalEntryDetails from "./HospitalEntryDetails";
+import HealthCheckEntryDetails from "./HealthCheckEntryDetails";
 import { assertNever } from "../../utils";
 
 const EntryDetails = (props: EntryDetailsProps): JSX.Element => {

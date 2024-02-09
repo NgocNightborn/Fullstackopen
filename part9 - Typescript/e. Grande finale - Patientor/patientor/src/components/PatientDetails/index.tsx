@@ -18,7 +18,7 @@ import { Diagnose, Entry, Patient } from "../../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import TransgenderIcon from "@mui/icons-material/Transgender";
-import EntryDetails from "../EntryDetails/EntryDetails";
+import EntryDetails from "../EntryDetails";
 import AddEntry from "../AddEntry";
 
 const PatientDetails = () => {

@@ -4,7 +4,7 @@ import { HealthCheckEntryDetailsProps } from "./types";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { orange, yellow } from "@mui/material/colors";
-import DiagnosisList from "../../DiagnosisList/DiagnosisList";
+import DiagnosisList from "../../DiagnosisList";
 
 const HealthCheckEntryDetails = (props: HealthCheckEntryDetailsProps) => {
 
